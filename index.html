@@ -3,88 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detector de IP - Prueba Controlada</title>
+    <title>MANSIÓN MALDITA - Panel de Control</title>
+    
+    <!-- Font Awesome para iconos siniestros -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
+        /* ============================================
+           ESTILOS DE TERROR - VERSIÓN PERTURBADORA
+           Inspirado en casas embrujadas y horror cósmico
+        ============================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            text-align: center;
-            background: #f4f4f4;
+            font-family: 'Courier New', 'Creepster', monospace;
+            background: #0a0a0a;
+            color: #8b0000;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(0,0,0,0.9) 1px, transparent 1px, transparent 4px),
+                repeating-linear-gradient(90deg, rgba(139,0,0,0.05) 0px, rgba(139,0,0,0.05) 2px, transparent 2px, transparent 8px);
+            min-height: 100vh;
+            cursor: default;
         }
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        
+        /* Efecto de estática / interferencia fantasmal */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-radial-gradient(circle at 20% 30%, rgba(0,0,0,0) 0px, rgba(139,0,0,0.03) 2px, transparent 4px);
+            pointer-events: none;
+            z-index: 999;
+            animation: staticFlicker 0.15s infinite;
         }
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+        
+        @keyframes staticFlicker {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
         }
-        button:hover {
-            background: #0056b3;
+        
+        /* Contenedor maldito */
+        .cursed-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1rem;
+            position: relative;
+            z-index: 1;
         }
-        #resultado {
-            margin-top: 20px;
-            font-size: 18px;
-            word-break: break-all;
+        
+        /* Header embrujado */
+        .haunted-header {
+            background: rgba(10, 5, 5, 0.95);
+            border-bottom: 2px solid #3a0000;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(3px);
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .ip {
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-evil {
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #28a745;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #8b0000;
+            color: #cc0000;
+            text-decoration: none;
+            letter-spacing: 3px;
         }
-        .nota {
-            margin-top: 30px;
-            font-size: 12px;
-            color: gray;
+        
+        .logo-evil i {
+            margin-right: 0.5rem;
+            animation: pulseRed 1.5s infinite;
+        }
+        
+        @keyframes pulseRed {
+            0%, 100% { text-shadow: 0 0 2px red; }
+            50% { text-shadow: 0 0 15px #ff4444; }
+        }
+        
+        /* Navegación siniestra */
+        .nav-ghost {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-ghost a {
+            color: #8b3a3a;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+            position: relative;
+        }
+        
+        .nav-ghost a:hover {
+            color: #ff3333;
+            text-shadow: 0 0 5px red;
+            transform: scale(1.05);
+        }
+        
+        .nav-ghost a:hover::after {
+            content: "⚠️";
+            position: absolute;
+            left: -20px;
+            top: -5px;
+            font-size: 0.7rem;
+            animation: shake 0.3s infinite;
+        }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+        
+        /* Tarjetas del abismo */
+        .eldritch-card {
+            background: rgba(15, 5, 5, 0.85);
+            backdrop-filter: blur(5px);
+            border: 1px solid #3a0a0a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        
+        .eldritch-card:hover {
+            border-color: #8b0000;
+            box-shadow: 0 0 20px rgba(139,0,0,0.5);
+            transform: translateY(-3px);
+        }
+        
+        .eldritch-card:hover::before {
+            content: "👁️";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1rem;
+            opacity: 0.5;
+            animation: glance 2s infinite;
+        }
+        
+        @keyframes glance {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; text-shadow: 0 0 5px red; }
+        }
+        
+        .card-title {
+            color: #aa3a3a;
+            border-left: 3px solid #8b0000;
+            padding-left: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+        
+        /* Métricas ensangrentadas */
+        .blood-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #cc3333;
+            text-shadow: 0 0 8px #ff0000;
+            letter-spacing: -1px;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #6b2a2a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Tabla espectral */
+        .spectral-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .spectral-table th {
+            background: #1a0505;
+            color: #8b3a3a;
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 2px solid #3a0000;
+            font-weight: normal;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        
+        .spectral-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #2a0a0a;
+            color: #aa7a7a;
+        }
+        
+        .spectral-table tr:hover td {
+            background: rgba(139,0,0,0.15);
+            color: #ffaaaa;
+        }
+        
+        /* Badges malditos */
+        .cursed-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            background: #1a0505;
+        }
+        
+        .badge-possessed {
+            background: #2a0000;
+            color: #ff6666;
+            border-left: 2px solid red;
+        }
+        
+        .badge-dormant {
+            background: #0a0a0a;
+            color: #664444;
+        }
+        
+        /* Botones del averno */
+        .btn-abyss {
+            background: #1a0505;
+            border: 1px solid #8b0000;
+            color: #cc6666;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: monospace;
+        }
+        
+        .btn-abyss:hover {
+            background: #3a0000;
+            color: #ff8888;
+            box-shadow: 0 0 10px red;
+            border-color: #ff3333;
+        }
+        
+        /* Ventana modal de terror (oculta) */
+        .modal-horror {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #0a0202;
+            border: 2px solid #8b0000;
+            padding: 2rem;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeInBlood 0.5s;
+        }
+        
+        @keyframes fadeInBlood {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+                filter: blur(3px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Mensajes ocultos */
+        .whisper {
+            font-size: 0.6rem;
+            color: #3a1a1a;
+            text-align: center;
+            margin-top: 2rem;
+            letter-spacing: 1px;
+        }
+        
+        /* Scrollbar maldita */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0202;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3a0000;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8b0000;
+        }
+        
+        /* Animación de respiración para elementos clave */
+        .breathe-horror {
+            animation: breathe 3s infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; text-shadow: 0 0 3px red; }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>🔍 Detector de IP</h2>
-        <p>Haz clic en el botón para obtener tu dirección IP pública.</p>
-        <button onclick="detectarIP()">Detectar mi IP</button>
-        <div id="resultado"></div>
-        <div class="nota">
-            ⚠️ Prueba controlada con consentimiento del usuario.<br>
-            La IP se obtiene mediante <a href="https://api.ipify.org" target="_blank">api.ipify.org</a>
+
+<div class="haunted-header">
+    <div class="cursed-container">
+        <div class="header-content">
+            <a href="#" class="logo-evil">
+                <i class="fas fa-skull"></i> MANSIÓN INFERNAL
+            </a>
+            <div class="nav-ghost">
+                <a href="#"><i class="fas fa-eye"></i> VIGILAR</a>
+                <a href="#"><i class="fas fa-book-dead"></i> SECTA</a>
+                <a href="#"><i class="fas fa-ghost"></i> ESPECTROS</a>
+                <a href="#"><i class="fas fa-church"></i> RITUAL</a>
+            </div>
         </div>
     </div>
+</div>
 
-    <script>
-        async function detectarIP() {
-            const resultadoDiv = document.getElementById('resultado');
-            resultadoDiv.innerHTML = '<p>Obteniendo IP... ⏳</p>';
-            
-            try {
-                // Opción 1: Usar ipify (recomendada)
-                const respuesta = await fetch('https://api.ipify.org?format=json');
-                const datos = await respuesta.json();
-                const ip = datos.ip;
-                
-                resultadoDiv.innerHTML = `<p>📡 Tu IP pública es: <span class="ip">${ip}</span></p>`;
-                
-                // También puedes mostrar en consola para registro
-                console.log(`[Experimento] IP detectada: ${ip}`);
-                
-                // Opcional: guardar en localStorage o enviar a servidor (solo con consentimiento adicional)
-                
-            } catch (error) {
-                resultadoDiv.innerHTML = '<p style="color:red;">❌ Error al detectar la IP. Revisa tu conexión.</p>';
-                console.error('Error:', error);
-            }
-        }
+<div class="cursed-container">
+    
+    <!-- Métricas del inframundo -->
+    <div class="blood-stats">
+        <div class="eldritch-card">
+            <div class="stat-number">666</div>
+            <div class="stat-label">ALMAS CONDENADAS</div>
+        </div>
+        <div class="eldritch-card">
+            <div class="stat-number">13</div>
+            <div class="stat-label">MANIFESTACIONES</div>
+        </div>
+        <div class="eldritch-card">
+            <div class="stat-number">███</div>
+            <div class="stat-label">SUSURROS OCULTOS</div>
+        </div>
+        <div class="eldritch-card">
+            <div class="stat-number">3:33 AM</div>
+            <div class="stat-label">HORA BRUJA</div>
+        </div>
+    </div>
+    
+    <!-- Grid de terror -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
         
-        // Opcional: detectar automáticamente al cargar la página
-        // detectarIP();  // Descomenta si quieres que se ejecute sin clic
-    </script>
+        <!-- Card de actividad paranormal -->
+        <div class="eldritch-card">
+            <div class="card-title">
+                <i class="fas fa-dice-d6"></i> ACTIVIDAD RECIENTE
+            </div>
+            <ul style="list-style: none;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #2a0a0a;">
+                    <i class="fas fa-demon"></i> Se abrió el sótano solo — <span style="color:#6b2a2a;">hace 3 min</span>
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #2a0a0a;">
+                    <i class="fas fa-frog"></i> Ranas en el espejo — <span style="color:#6b2a2a;">hace 13 min</span>
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <i class="fas fa-hand-peace"></i> Mano en la pared — <span style="color:#6b2a2a;">hace 42 min</span>
+                </li>
+            </ul>
+            <button class="btn-abyss" style="margin-top: 1rem; width: 100%;" onclick="alert('⚠️ El ritual ha comenzado... ⚠️')">
+                <i class="fas fa-pentagram"></i> INVOCAR REGISTRO
+            </button>
+        </div>
+        
+        <!-- Card de profecía -->
+        <div class="eldritch-card">
+            <div class="card-title">
+                <i class="fas fa-crystal-ball"></i> PRESAGIO
+            </div>
+            <p style="font-style: italic; line-height: 1.6;">
+                "Cuando la luna sangre mire al este,<br>
+                los siete susurrarán tu nombre.<br>
+                No abras la puerta... ya está abierta."
+            </p>
+            <div class="whisper" style="margin-top: 1rem;">
+                <i class="fas fa-feather-alt"></i> (se siente una presencia)
+            </div>
+        </div>
+        
+        <!-- Card del vigilante -->
+        <div class="eldritch-card">
+            <div class="card-title">
+                <i class="fas fa-all-seeing-eye"></i> EL QUE OBSERVA
+            </div>
+            <div style="text-align: center; padding: 0.5rem;">
+                <i class="fas fa-eye" style="font-size: 3rem; color: #8b0000; animation: pulseRed 1s infinite;"></i>
+                <p style="margin-top: 0.5rem;">"Te estamos viendo desde el espejo"</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tabla de almas en pena -->
+    <div class="eldritch-card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 1rem; border-bottom: 1px solid #3a0a0a;">
+            <i class="fas fa-chalkboard-user"></i> MANIFESTACIONES REGISTRADAS
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="spectral-table">
+                <thead>
+                    <tr><th>ENTIDAD</th><th>UBICACIÓN</th><th>NIVEL PELIGRO</th><th>ÚLTIMO AVISTAMIENTO</th><th></th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>La niña del pozo</td><td>Sótano este</td><td><span class="cursed-badge badge-possessed">EXTREMO</span></td><td>Hace 5 min</td><td><button class="btn-abyss" style="padding: 0.2rem 0.5rem;" onclick="abrirDemonio()"><i class="fas fa-skull"></i></button></td></tr>
+                    <tr><td>Espéjo roto</td><td>Pasillo 2do piso</td><td><span class="cursed-badge badge-dormant">LATENTE</span></td><td>Hace 2 horas</td><td><button class="btn-abyss" style="padding: 0.2rem 0.5rem;" onclick="abrirDemonio()"><i class="fas fa-skull"></i></button></td></tr>
+                    <tr><td>El susurrante</td><td>Ático</td><td><span class="cursed-badge badge-possessed">ALTO</span></td><td>Hace 13 min</td><td><button class="btn-abyss" style="padding: 0.2rem 0.5rem;" onclick="abrirDemonio()"><i class="fas fa-skull"></i></button></td></tr>
+                    <tr><td>Sombra sin nombre</td><td>Jardín trasero</td><td><span class="cursed-badge badge-dormant">DESCONOCIDO</span></td><td>Anoche</td><td><button class="btn-abyss" style="padding: 0.2rem 0.5rem;" onclick="abrirDemonio()"><i class="fas fa-skull"></i></button></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Sección de rituales -->
+    <div style="margin-top: 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <button class="btn-abyss" onclick="window.location.reload();">
+            <i class="fas fa-redo-alt"></i> RENOVAR SUGILIO
+        </button>
+        <button class="btn-abyss" onclick="document.body.style.filter = 'invert(1)'; setTimeout(()=> document.body.style.filter = '', 3000);">
+            <i class="fas fa-mask"></i> VISIÓN ESPECTRAL
+        </button>
+        <button class="btn-abyss breathe-horror" onclick="abrirModal()">
+            <i class="fas fa-door-open"></i> ABRIR PORTAL
+        </button>
+    </div>
+    
+    <div class="whisper">
+        <i class="fas fa-hourglass-half"></i> "No estás solo, alguien respira detrás de este texto" <i class="fas fa-hourglass-half"></i>
+    </div>
+</div>
+
+<!-- Modal demoníaco -->
+<div id="demonModal" class="modal-horror">
+    <div class="modal-content">
+        <i class="fas fa-dragon" style="font-size: 4rem; color: #8b0000; margin-bottom: 1rem;"></i>
+        <h3 style="color: #cc5555;">HAS CONVOCADO ALGO</h3>
+        <p style="margin: 1rem 0;">"El pacto está sellado. Ahora te pertenezco."</p>
+        <button class="btn-abyss" onclick="cerrarModal()">HUIR (inútil)</button>
+    </div>
+</div>
+
+<script>
+    function abrirDemonio() {
+        alert("👹 Sientes una respiración en tu nuca...");
+        let randomSound = Math.random() > 0.5;
+        if(randomSound) {
+            document.body.style.animation = 'shake 0.2s infinite';
+            setTimeout(() => document.body.style.animation = '', 1000);
+        }
+    }
+    
+    function abrirModal() {
+        document.getElementById('demonModal').style.display = 'flex';
+    }
+    
+    function cerrarModal() {
+        document.getElementById('demonModal').style.display = 'none';
+        alert("🔮 Demasiado tarde, ya está dentro de tu casa.");
+    }
+    
+    // Texto oculto que aparece
+    setTimeout(() => {
+        let hiddenMsg = document.createElement('div');
+        hiddenMsg.innerHTML = "❓ Te susurran: 'mírame a los ojos' ❓";
+        hiddenMsg.style.position = 'fixed';
+        hiddenMsg.style.bottom = '10px';
+        hiddenMsg.style.right = '10px';
+        hiddenMsg.style.backgroundColor = '#0a0202';
+        hiddenMsg.style.color = '#6b2a2a';
+        hiddenMsg.style.padding = '0.5rem';
+        hiddenMsg.style.fontSize = '0.7rem';
+        hiddenMsg.style.border = '1px solid #8b0000';
+        hiddenMsg.style.zIndex = '9999';
+        document.body.appendChild(hiddenMsg);
+        setTimeout(() => hiddenMsg.remove(), 6000);
+    }, 8000);
+</script>
+
 </body>
 </html>
