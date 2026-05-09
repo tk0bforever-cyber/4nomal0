@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimento IP - Control de Visitas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #1a73e8;
+        }
+        button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #1557b0;
+        }
+        .ip {
+            font-weight: bold;
+            color: #e37400;
+        }
+        .visita {
+            background: #e8f0fe;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #1a73e8;
+        }
+        .visita .tiempo {
+            font-size: 12px;
+            color: #5f6368;
+        }
+        #listaVisitas {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .modo-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .modo-visitante { background: #e37400; color: white; }
+        .modo-admin { background: #1a73e8; color: white; }
+        hr {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel" id="panelVisitante">
+        <div class="modo-badge modo-visitante">👤 MODO VISITANTE</div>
+        <h2>🔍 Tu información</h2>
+        <p>Tu IP pública es: <span id="miIP" class="ip">(detectando...)</span></p>
+        <p>Al entrar a esta página, el administrador ha sido notificado.</p>
+        <hr>
+        <p><small>⚠️ Prueba controlada con consentimiento</small></p>
+    </div>
+
+    <div class="panel" id="panelAdmin" style="display:none;">
+        <div class="modo-badge modo-admin">👑 MODO ADMINISTRADOR</div>
+        <h2>📡 Nuevas visitas en tiempo real</h2>
+        <button onclick="borrarHistorial()">🗑️ Borrar historial</button>
+        <div id="listaVisitas">
+            <p style="color:gray;">Esperando visitas...</p>
+        </div>
+    </div>
+
+    <script>
+        let esAdmin = false;
+        let visitasRegistradas = [];
+
+        // Detectar IP propia
+        async function detectarMiIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                document.getElementById('miIP').innerText = data.ip;
+                
+                // Registrar esta visita en el servidor (solo si no es admin)
+                if (!esAdmin) {
+                    await fetch('/visita', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            ip: data.ip,
+                            userAgent: navigator.userAgent
+                        })
+                    });
+                }
+            } catch (error) {
+                document.getElementById('miIP').innerText = 'Error al detectar';
+            }
+        }
+
+        // Escuchar notificaciones SSE (solo para admin)
+        function escucharNotificaciones() {
+            const eventSource = new EventSource('/events');
+            
+            eventSource.onmessage = function(event) {
+                const visita = JSON.parse(event.data);
+                agregarVisitaALista(visita);
+            };
+            
+            eventSource.onerror = function() {
+                console.log('Desconectado del servidor, reintentando...');
+                setTimeout(escucharNotificaciones, 3000);
+            };
+        }
+
+        function agregarVisitaALista(visita) {
+            visitasRegistradas.unshift(visita);
+            actualizarListaHTML();
+        }
+
+        function actualizarListaHTML() {
+            const contenedor = document.getElementById('listaVisitas');
+            if (visitasRegistradas.length === 0) {
+                contenedor.innerHTML = '<p style="color:gray;">Esperando visitas...</p>';
+                return;
+            }
+            
+            contenedor.innerHTML = visitasRegistradas.map(v => `
+                <div class="visita">
+                    <strong>📌 IP:</strong> <span class="ip">${v.ip}</span><br>
+                    <strong>🖥️ Navegador:</strong> ${v.userAgent.substring(0, 80)}...<br>
+                    <span class="tiempo">🕒 ${v.timestamp}</span>
+                </div>
+            `).join('');
+        }
+
+        function borrarHistorial() {
+            visitasRegistradas = [];
+            actualizarListaHTML();
+        }
+
+        // Detectar si es admin por URL (?admin)
+        const urlParams = new URLSearchParams(window.location.search);
+        esAdmin = urlParams.has('admin');
+        
+        if (esAdmin) {
+            document.getElementById('panelVisitante').style.display = 'none';
+            document.getElementById('panelAdmin').style.display = 'block';
+            escucharNotificaciones();
+            console.log('Modo administrador activado - Viendo visitas en tiempo real');
+        } else {
+            document.getElementById('panelVisitante').style.display = 'block';
+            document.getElementById('panelAdmin').style.display = 'none';
+            detectarMiIP();
+        }
+    </script>
+</body>
+</html>
+
